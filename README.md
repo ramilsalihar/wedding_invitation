@@ -1,10 +1,10 @@
 # Wedding invitation
 
-A bilingual, mobile-first wedding invitation inspired by the Safini invitation frontend. It includes a cover reveal, photo marquee, countdown, event details, map and Telegram links, dress-code guidance, and personalized guest links.
+A bilingual, mobile-first Next.js wedding invitation. It includes a cover reveal, photo marquee, countdown, event details, map and Telegram links, dress-code guidance, background music, and personalized guest links.
 
 ## Run locally
 
-Requires Node.js 22.13 or newer.
+Requires Node.js 22.
 
 ```bash
 npm install
@@ -32,5 +32,10 @@ Personalized links support these optional parameters:
 
 ```bash
 npm run lint
+npm test
 npm run build
 ```
+
+## Deploy to Vercel
+
+Import the repository using the Next.js framework preset. Keep the root directory, build command, output directory, and install command at their defaults. No environment variables are required.
