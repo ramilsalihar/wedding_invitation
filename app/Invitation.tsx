@@ -1,9 +1,37 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { copy, invitation, type Language } from "./invitation-content";
 
 const carouselPhotos = [1, 2, 3, 4, 5, 6];
+
+type GuestQuery = {
+  type: "male" | "female" | "friends";
+  names: string[];
+};
+
+function readGuestQuery(search: string): GuestQuery | null {
+  const params = new URLSearchParams(search);
+  const male = params.get("male")?.trim();
+  if (male) return { type: "male", names: [male] };
+
+  const female = params.get("female")?.trim();
+  if (female) return { type: "female", names: [female] };
+
+  // Supports both ?friends=Айдана%26Артем and the requested
+  // shorthand ?friends=Айдана&Артем.
+  const rawFriends = search.match(/[?&]friends=([\s\S]*?)(?=&(?:lang|male|female|name)=|$)/)?.[1];
+  if (!rawFriends) return null;
+
+  let decoded = rawFriends;
+  try {
+    decoded = decodeURIComponent(rawFriends.replace(/\+/g, " "));
+  } catch {
+    // Keep the original value when it contains malformed URL escapes.
+  }
+  const names = decoded.split("&").map((name) => name.trim()).filter(Boolean);
+  return names.length ? { type: "friends", names } : null;
+}
 
 function useCountdown(target: string) {
   const [now, setNow] = useState(() => Date.now());
@@ -28,7 +56,9 @@ function useCountdown(target: string) {
 export function Invitation() {
   const [lang, setLang] = useState<Language>("ru");
   const [coverOpen, setCoverOpen] = useState(false);
-  const [guest, setGuest] = useState("");
+  const [guestQuery, setGuestQuery] = useState<GuestQuery | null>(null);
+  const [musicPlaying, setMusicPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const countdown = useCountdown(invitation.event.date);
   const t = copy[lang];
 
@@ -36,18 +66,51 @@ export function Invitation() {
     const restore = window.setTimeout(() => {
       const params = new URLSearchParams(window.location.search);
       const urlLanguage = params.get("lang");
-      const urlGuest = params.get("name");
       if (urlLanguage === "ru" || urlLanguage === "en") setLang(urlLanguage);
-      if (urlGuest) setGuest(urlGuest);
+      setGuestQuery(readGuestQuery(window.location.search));
     }, 0);
     return () => window.clearTimeout(restore);
   }, []);
 
-  const greeting = guest.trim() ? `${t.personalizedGreeting}, ${guest.trim()}!` : t.greeting;
+  const greeting = useMemo(() => {
+    if (!guestQuery) return t.greeting;
+    if (guestQuery.type === "male") return `${t.greetingMale} ${guestQuery.names[0]},`;
+    if (guestQuery.type === "female") return `${t.greetingFemale} ${guestQuery.names[0]},`;
+    const conjunction = lang === "ru" ? " и " : " and ";
+    return `${t.greetingFriends} ${guestQuery.names.join(conjunction)},`;
+  }, [guestQuery, lang, t]);
   const names = `${invitation.couple.first} & ${invitation.couple.second}`;
+
+  async function openInvitation(playMusic: boolean) {
+    setCoverOpen(true);
+    if (!playMusic || !audioRef.current) return;
+    try {
+      await audioRef.current.play();
+      setMusicPlaying(true);
+    } catch {
+      setMusicPlaying(false);
+    }
+  }
+
+  async function toggleMusic() {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (musicPlaying) {
+      audio.pause();
+      setMusicPlaying(false);
+      return;
+    }
+    try {
+      await audio.play();
+      setMusicPlaying(true);
+    } catch {
+      setMusicPlaying(false);
+    }
+  }
 
   return (
     <main className="invitation-shell">
+      <audio ref={audioRef} src="/assets/music/Odysseus.m4a" loop preload="none" />
       <div className="floating-controls" aria-label="Language">
         {(["ru", "en"] as const).map((language) => (
           <button key={language} className={lang === language ? "active" : ""} onClick={() => setLang(language)} aria-pressed={lang === language}>
@@ -56,16 +119,22 @@ export function Invitation() {
         ))}
       </div>
 
+      {coverOpen && (
+        <button className="music-toggle" type="button" onClick={toggleMusic} aria-pressed={musicPlaying} aria-label={musicPlaying ? "Pause background music" : "Play background music"}>
+          {musicPlaying ? "♫" : "♪"}
+        </button>
+      )}
+
       {!coverOpen && (
         <section className="cover" aria-label={t.invitation}>
           <img className="garland" src="/inv/garland-lights.png" alt="" width="850" height="360" />
           <p className="script-name">{names}</p>
           <div className="polaroid">
-            <img src="/inv/photo-intro.jpeg" alt={`${invitation.couple.first} and ${invitation.couple.second}`} width="720" height="960" fetchPriority="high" />
+            <img src="/assets/photos/carousel-4.jpg" alt={`${invitation.couple.first} and ${invitation.couple.second}`} width="1400" height="933" fetchPriority="high" />
           </div>
-          <button className="heart-button" onClick={() => setCoverOpen(true)} aria-label={t.open}>♥</button>
+          <button className="heart-button" onClick={() => openInvitation(true)} aria-label={t.open}>♥</button>
           <span className="cover-label">{t.open}</span>
-          <button className="text-button" onClick={() => setCoverOpen(true)}>{t.skip}</button>
+          <button className="text-button" onClick={() => openInvitation(false)}>{t.skip}</button>
         </section>
       )}
 
