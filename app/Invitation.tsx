@@ -34,14 +34,19 @@ function readGuestQuery(search: string): GuestQuery | null {
 }
 
 function useCountdown(target: string) {
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState<number | null>(null);
 
   useEffect(() => {
+    const initialTimer = window.setTimeout(() => setNow(Date.now()), 0);
     const timer = window.setInterval(() => setNow(Date.now()), 1000);
-    return () => window.clearInterval(timer);
+    return () => {
+      window.clearTimeout(initialTimer);
+      window.clearInterval(timer);
+    };
   }, []);
 
   return useMemo(() => {
+    if (now === null) return { days: "—", hours: "—", minutes: "—", seconds: "—" };
     const remaining = Math.max(0, new Date(target).getTime() - now);
     const pad = (value: number) => String(value).padStart(2, "0");
     return {
@@ -70,6 +75,31 @@ export function Invitation() {
       setGuestQuery(readGuestQuery(window.location.search));
     }, 0);
     return () => window.clearTimeout(restore);
+  }, []);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const startMusic = async () => {
+      if (!audio.paused) return;
+      try {
+        await audio.play();
+        setMusicPlaying(true);
+        document.removeEventListener("pointerdown", startMusic);
+        document.removeEventListener("keydown", startMusic);
+      } catch {
+        // Browsers commonly require a gesture; listeners remain for the first interaction.
+      }
+    };
+
+    void startMusic();
+    document.addEventListener("pointerdown", startMusic);
+    document.addEventListener("keydown", startMusic);
+    return () => {
+      document.removeEventListener("pointerdown", startMusic);
+      document.removeEventListener("keydown", startMusic);
+    };
   }, []);
 
   const greeting = useMemo(() => {
@@ -110,7 +140,7 @@ export function Invitation() {
 
   return (
     <main className="invitation-shell">
-      <audio ref={audioRef} src="/assets/music/Odysseus.m4a" loop preload="none" />
+      <audio ref={audioRef} src="/assets/music/Odysseus.m4a" autoPlay loop preload="auto" />
       <div className="floating-controls" aria-label="Language">
         {(["ru", "en"] as const).map((language) => (
           <button key={language} className={lang === language ? "active" : ""} onClick={() => setLang(language)} aria-pressed={lang === language}>
@@ -186,9 +216,9 @@ export function Invitation() {
             <div><dt>{t.place}</dt><dd>{invitation.venue.name}<small>{invitation.venue.city[lang]} · {invitation.venue.address}</small></dd></div>
           </dl>
           <div className="venue-gallery">
-            <img src="/assets/location/royal-1.jpg" alt={`${invitation.venue.name} venue`} width="328" height="170" loading="lazy" />
-            <img src="/assets/location/royal-2.jpg" alt={`${invitation.venue.name} interior`} width="328" height="170" loading="lazy" />
             <img src="/assets/location/royal-3.jpg" alt={`${invitation.venue.name} hall`} width="328" height="170" loading="lazy" />
+            <img src="/assets/location/royal-2.jpg" alt={`${invitation.venue.name} interior`} width="328" height="170" loading="lazy" />
+            <img src="/assets/location/royal-1.jpg" alt={`${invitation.venue.name} venue`} width="328" height="170" loading="lazy" />
           </div>
           <a className="primary-link" href={invitation.venue.mapUrl} target="_blank" rel="noreferrer">⌖ {t.openMap}</a>
         </div>
