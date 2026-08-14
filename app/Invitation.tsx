@@ -190,6 +190,7 @@ export function Invitation() {
         <div className="schedule">
           <strong>{invitation.event.banquetTime}</strong><span>{t.banquet}</span>
         </div>
+        <p className="event-hosts">Хозяева мероприятия: Куштарбек и Гульнар</p>
       </section>
 
       <section className="section">
@@ -211,9 +212,9 @@ export function Invitation() {
       </section>
 
       <footer>
-        <img src="/assets/photos/footer-couple.jpg" alt={`${invitation.couple.first} and ${invitation.couple.second}`} width="1290" height="2293" loading="lazy" />
-        <p className="script-name">{names}</p>
-        <strong>{invitation.event.displayDate} · {invitation.event.banquetTime}</strong>
+        <div className="footer-photo">
+          <img src="/assets/photos/footer-couple.jpg" alt={`${invitation.couple.first} and ${invitation.couple.second}`} width="1290" height="2293" loading="lazy" />
+        </div>
         <em>{t.footer}</em>
       </footer>
     </main>
