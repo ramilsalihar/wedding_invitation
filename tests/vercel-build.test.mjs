@@ -33,6 +33,7 @@ test("uses a bundled script font with Cyrillic glyphs", async () => {
 
 test("the first heart interaction opens independently from audio playback", async () => {
   const invitation = await readFile(new URL("../app/Invitation.tsx", import.meta.url), "utf8");
+  const styles = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
 
   assert.doesNotMatch(invitation, /document\.addEventListener\("pointerdown"/);
   assert.doesNotMatch(invitation, /<audio[^>]+autoPlay/);
@@ -45,4 +46,7 @@ test("the first heart interaction opens independently from audio playback", asyn
     invitation,
     /function openInvitation\(\) \{\s*setCoverOpen\(true\);\s*void startMusic\(\);\s*\}/,
   );
+  assert.match(invitation, /className="heart-icon"/);
+  assert.match(styles, /\.heart-button \{[^}]*flex:\s*0 0 68px;/);
+  assert.match(styles, /\.heart-button \{[^}]*min-height:\s*68px;/);
 });
