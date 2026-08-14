@@ -123,7 +123,7 @@ export function Invitation() {
 
   return (
     <main className="invitation-shell">
-      <audio ref={audioRef} src="/assets/music/Odysseus.m4a" loop preload="metadata" />
+      <audio ref={audioRef} src="/assets/music/Sunset-Lover.m4a" loop preload="metadata" />
       <div className="floating-controls" aria-label="Language">
         {(["ru", "en"] as const).map((language) => (
           <button key={language} className={lang === language ? "active" : ""} onClick={() => setLang(language)} aria-pressed={lang === language}>

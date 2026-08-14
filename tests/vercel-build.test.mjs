@@ -50,3 +50,12 @@ test("the first heart interaction opens independently from audio playback", asyn
   assert.match(styles, /\.heart-button \{[^}]*flex:\s*0 0 68px;/);
   assert.match(styles, /\.heart-button \{[^}]*min-height:\s*68px;/);
 });
+
+test("the cover keeps the heart tappable in short mobile Safari viewports", async () => {
+  const styles = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  assert.match(styles, /\.cover \{[^}]*min-height:\s*100dvh;/);
+  assert.match(styles, /\.heart-button \{[^}]*isolation:\s*isolate;/);
+  assert.match(styles, /@media \(max-height:\s*850px\)[\s\S]*?\.cover \{[^}]*justify-content:\s*flex-start;/);
+  assert.doesNotMatch(styles, /@keyframes heartbeat \{[^}]*\bscale:/);
+});
