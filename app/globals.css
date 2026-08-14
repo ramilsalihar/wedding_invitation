@@ -21,7 +21,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .music-toggle { position: fixed; z-index: 80; top: 14px; left: calc(50% - min(218px, 43vw)); display: grid; width: 42px; height: 42px; padding: 0; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--green); background: rgb(255 255 255 / 90%); backdrop-filter: blur(10px); font-size: 1.2rem; cursor: pointer; }
 .music-toggle[aria-pressed="false"] { color: #8a968d; }
 
-.cover { position: fixed; z-index: 100; inset: 0; width: min(100%, 520px); min-height: 100vh; min-height: 100dvh; margin-inline: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: max(26px, env(safe-area-inset-top)) 22px max(26px, env(safe-area-inset-bottom)); overflow-y: auto; -webkit-overflow-scrolling: touch; background: #faf6eb; animation: cover-in .6s ease both; }
+.cover { position: fixed; z-index: 100; inset: 0; width: min(100%, 520px); min-height: 100vh; min-height: 100dvh; margin-inline: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: max(26px, env(safe-area-inset-top)) 22px max(26px, env(safe-area-inset-bottom)); overflow-y: auto; -webkit-overflow-scrolling: touch; background: #faf6eb; cursor: pointer; animation: cover-in .6s ease both; }
 .garland { width: min(340px, 80vw); height: auto; margin-bottom: -16px; opacity: .72; }
 .script-name { margin: 0; font-family: var(--font-marck-script), cursive; font-size: clamp(2.6rem, 11vw, 3.6rem); line-height: 1.1; color: #26251f; }
 .polaroid { width: min(280px, 68vw, 43vh); padding: 11px 11px 44px; background: white; box-shadow: 0 16px 38px rgb(38 37 31 / 18%); rotate: -1.5deg; }

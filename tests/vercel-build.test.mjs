@@ -38,10 +38,7 @@ test("the first heart interaction opens independently from audio playback", asyn
   assert.doesNotMatch(invitation, /document\.addEventListener\("pointerdown"/);
   assert.doesNotMatch(invitation, /<audio[^>]+autoPlay/);
   assert.doesNotMatch(invitation, /className="heart-button"[^>]+onPointerDown=/);
-  assert.match(
-    invitation,
-    /className="heart-button"[^>]+onClick=\{openInvitation\}/,
-  );
+  assert.match(invitation, /className="heart-button"[^>]+type="button"/);
   assert.match(
     invitation,
     /function openInvitation\(\) \{\s*setCoverOpen\(true\);\s*void startMusic\(\);\s*\}/,
@@ -58,4 +55,14 @@ test("the cover keeps the heart tappable in short mobile Safari viewports", asyn
   assert.match(styles, /\.heart-button \{[^}]*isolation:\s*isolate;/);
   assert.match(styles, /@media \(max-height:\s*850px\)[\s\S]*?\.cover \{[^}]*justify-content:\s*flex-start;/);
   assert.doesNotMatch(styles, /@keyframes heartbeat \{[^}]*\bscale:/);
+});
+
+test("tapping anywhere on the cover opens the invitation and starts music", async () => {
+  const invitation = await readFile(new URL("../app/Invitation.tsx", import.meta.url), "utf8");
+
+  assert.match(
+    invitation,
+    /<section className="cover"[^>]+onClick=\{openInvitation\}/,
+  );
+  assert.doesNotMatch(invitation, /onClick=\{openCover\}/);
 });

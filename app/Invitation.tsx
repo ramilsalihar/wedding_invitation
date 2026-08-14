@@ -86,10 +86,6 @@ export function Invitation() {
   }, [guestQuery, lang, t]);
   const names = `${invitation.couple.first} & ${invitation.couple.second}`;
 
-  function openCover() {
-    setCoverOpen(true);
-  }
-
   async function startMusic() {
     if (!audioRef.current || !audioRef.current.paused) return;
     try {
@@ -139,19 +135,19 @@ export function Invitation() {
       )}
 
       {!coverOpen && (
-        <section className="cover" aria-label={t.invitation}>
+        <section className="cover" aria-label={t.invitation} onClick={openInvitation}>
           <img className="garland" src="/inv/garland-lights.png" alt="" width="850" height="360" />
           <p className="script-name">{names}</p>
           <div className="polaroid">
             <img src="/assets/photos/carousel-4.jpg" alt={`${invitation.couple.first} and ${invitation.couple.second}`} width="1400" height="933" fetchPriority="high" />
           </div>
-          <button className="heart-button" type="button" onClick={openInvitation} aria-label={t.open}>
+          <button className="heart-button" type="button" aria-label={t.open}>
             <svg className="heart-icon" viewBox="0 0 32 29" aria-hidden="true">
               <path d="M16 28C13.7 25.8 3 17.8 3 9.3 3 4.7 6.3 1.5 10.7 1.5c2.5 0 4.4 1.2 5.3 2.8.9-1.6 2.8-2.8 5.3-2.8C25.7 1.5 29 4.7 29 9.3 29 17.8 18.3 25.8 16 28Z" />
             </svg>
           </button>
           <span className="cover-label">{t.open}</span>
-          <button className="text-button" type="button" onClick={openCover}>{t.skip}</button>
+          <button className="text-button" type="button">{t.skip}</button>
         </section>
       )}
 
