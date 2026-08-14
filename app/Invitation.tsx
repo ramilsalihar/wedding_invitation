@@ -91,7 +91,6 @@ export function Invitation() {
   }
 
   async function startMusic() {
-    openCover();
     if (!audioRef.current || !audioRef.current.paused) return;
     try {
       await audioRef.current.play();
@@ -99,6 +98,11 @@ export function Invitation() {
     } catch {
       setMusicPlaying(false);
     }
+  }
+
+  function openInvitation() {
+    setCoverOpen(true);
+    void startMusic();
   }
 
   async function toggleMusic() {
@@ -141,7 +145,7 @@ export function Invitation() {
           <div className="polaroid">
             <img src="/assets/photos/carousel-4.jpg" alt={`${invitation.couple.first} and ${invitation.couple.second}`} width="1400" height="933" fetchPriority="high" />
           </div>
-          <button className="heart-button" type="button" onPointerDown={startMusic} onClick={startMusic} aria-label={t.open}>♥</button>
+          <button className="heart-button" type="button" onClick={openInvitation} aria-label={t.open}>♥</button>
           <span className="cover-label">{t.open}</span>
           <button className="text-button" type="button" onClick={openCover}>{t.skip}</button>
         </section>
@@ -180,7 +184,6 @@ export function Invitation() {
           ))}
         </div>
         <div className="schedule">
-          <strong>{invitation.event.gatheringTime}</strong><span>{t.gathering}</span>
           <strong>{invitation.event.banquetTime}</strong><span>{t.banquet}</span>
         </div>
       </section>
@@ -191,7 +194,7 @@ export function Invitation() {
           <h2>{t.details}</h2>
           <dl>
             <div><dt>{t.date}</dt><dd>{invitation.event.displayDate}</dd></div>
-            <div><dt>{t.time}</dt><dd>{invitation.event.gatheringTime}</dd></div>
+            <div><dt>{t.time}</dt><dd>{invitation.event.banquetTime}</dd></div>
             <div><dt>{t.place}</dt><dd>{invitation.venue.name}<small>{invitation.venue.city[lang]} · {invitation.venue.address}</small></dd></div>
           </dl>
           <div className="venue-gallery">
@@ -203,29 +206,10 @@ export function Invitation() {
         </div>
       </section>
 
-      <section className="section text-section">
-        <p className="eyebrow">Dress code</p>
-        <h2>{t.dressTitle}</h2>
-        <p>{t.dressBody}</p>
-        <p className="note">{t.dressNote}</p>
-        <div className="palette" aria-label="Suggested color palette">
-          {["#c3b59f", "#899478", "#d9c6c1", "#a68474", "#6b7a68"].map((color) => <span key={color} style={{ backgroundColor: color }} />)}
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="card photo-card">
-          <span className="camera" aria-hidden="true">□</span>
-          <h2>{t.photosTitle}</h2>
-          <p>{t.photosBody}</p>
-          <a className="primary-link" href={invitation.links.telegram} target="_blank" rel="noreferrer">{t.photosButton}</a>
-        </div>
-      </section>
-
       <footer>
         <img src="/inv/three-roses.png" alt="" width="1000" height="669" loading="lazy" />
         <p className="script-name">{names}</p>
-        <strong>{invitation.event.displayDate} · {invitation.event.gatheringTime}</strong>
+        <strong>{invitation.event.displayDate} · {invitation.event.banquetTime}</strong>
         <em>{t.footer}</em>
       </footer>
     </main>

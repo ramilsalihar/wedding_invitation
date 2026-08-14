@@ -36,8 +36,13 @@ test("the first heart interaction opens independently from audio playback", asyn
 
   assert.doesNotMatch(invitation, /document\.addEventListener\("pointerdown"/);
   assert.doesNotMatch(invitation, /<audio[^>]+autoPlay/);
+  assert.doesNotMatch(invitation, /className="heart-button"[^>]+onPointerDown=/);
   assert.match(
     invitation,
-    /className="heart-button"[^>]+onPointerDown=\{startMusic\}[^>]+onClick=\{startMusic\}/,
+    /className="heart-button"[^>]+onClick=\{openInvitation\}/,
+  );
+  assert.match(
+    invitation,
+    /function openInvitation\(\) \{\s*setCoverOpen\(true\);\s*void startMusic\(\);\s*\}/,
   );
 });

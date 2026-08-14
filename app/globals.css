@@ -73,16 +73,6 @@ dd small { display: block; margin-top: 3px; color: var(--muted); font-weight: 40
 .venue-gallery img { width: 100%; height: auto; aspect-ratio: 328/170; object-fit: cover; border-radius: 4px; }
 .venue-gallery img:last-child { grid-column: 1/-1; }
 .primary-link { display: flex; min-height: 52px; margin-top: 22px; padding: 12px 18px; align-items: center; justify-content: center; border-radius: 4px; color: white; background: var(--green); text-decoration: none; font-size: .82rem; font-weight: 700; letter-spacing: .04em; }
-.text-section { text-align: center; }
-.text-section h2 { margin-top: 10px; }
-.text-section > p:not(.eyebrow) { font-family: var(--serif); font-size: 1.3rem; line-height: 1.5; }
-.note { padding: 18px; border: 1px solid #ead8d5; border-radius: 8px; color: #6e3540; background: #faf3f2; font-style: italic; }
-.palette { display: flex; justify-content: center; gap: 10px; margin-top: 24px; }
-.palette span { width: 44px; height: 44px; border: 3px solid white; border-radius: 50%; box-shadow: 0 2px 8px rgb(30 53 40 / 18%); }
-.photo-card { text-align: center; }
-.photo-card p { color: var(--muted); line-height: 1.6; }
-.camera { display: grid; width: 52px; height: 52px; margin: 0 auto 16px; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--green); background: #f6f8f5; font-size: 1.5rem; }
-
 footer { padding: 20px 24px 90px; text-align: center; }
 footer img { display: block; width: min(270px, 68vw); height: auto; margin-inline: auto; }
 footer .script-name { font-size: 2.8rem; }
@@ -102,5 +92,4 @@ footer em { color: var(--muted); font-family: var(--serif); font-size: 1.2rem; }
 @media (max-width: 360px) {
   .countdown { gap: 4px; }
   .countdown div { padding-inline: 2px; }
-  .palette span { width: 38px; height: 38px; }
 }

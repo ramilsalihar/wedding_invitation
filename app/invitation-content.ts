@@ -4,20 +4,16 @@ export const invitation = {
     second: "Айдай",
   },
   event: {
-    date: "2026-09-07T19:00:00+06:00",
-    displayDate: "07 · 09 · 26",
+    date: "2026-09-07T16:00:00+06:00",
+    displayDate: "07 · 09 · 2026",
     weekday: { ru: "Понедельник", en: "Monday" },
-    gatheringTime: "19:00",
-    banquetTime: "20:00",
+    banquetTime: "16:00",
   },
   venue: {
     name: "Ресторан ROYAL",
     city: { ru: "г. Бишкек, Кыргызстан", en: "Bishkek, Kyrgyzstan" },
     address: "ул. Мадиева, 18/1",
     mapUrl: "https://2gis.kg/bishkek/search/royal%20%D1%80%D0%B5%D1%81%D1%82%D0%BE%D1%80%D0%B0%D0%BD/firm/70000001039587169/74.642512%2C42.823918?m=74.642512%2C42.823918%2F14.22",
-  },
-  links: {
-    telegram: "https://t.me/+L98ZSLvQvi8xMTQy",
   },
 } as const;
 
@@ -45,14 +41,7 @@ export const copy = {
     time: "Время",
     place: "Место",
     openMap: "Открыть на карте",
-    gathering: "Сбор гостей",
     banquet: "Начало банкета",
-    dressTitle: "Дресс-код",
-    dressBody: "Для нас главное — ваше присутствие! Будем рады светлым, нежным и природным оттенкам в ваших образах.",
-    dressNote: "Просим не выбирать полностью белые наряды — в этот день белый цвет принадлежит невесте.",
-    photosTitle: "Фото со дня свадьбы",
-    photosBody: "Добавляйте фотографии и видео в нашу общую группу — сохраним воспоминания вместе.",
-    photosButton: "Открыть Telegram-группу",
     footer: "С нетерпением ждём встречи с вами!",
   },
   en: {
@@ -76,14 +65,7 @@ export const copy = {
     time: "Time",
     place: "Venue",
     openMap: "Open in Maps",
-    gathering: "Guests gather",
     banquet: "Banquet begins",
-    dressTitle: "Dress code",
-    dressBody: "Your presence matters most. We would be delighted to see light, soft, and natural tones in your outfits.",
-    dressNote: "Please avoid fully white outfits — white belongs to the bride on this day.",
-    photosTitle: "Photos of the day",
-    photosBody: "Share your photos and videos in our group so we can collect the memories together.",
-    photosButton: "Open Telegram group",
     footer: "We can’t wait to celebrate with you!",
   },
 } as const;

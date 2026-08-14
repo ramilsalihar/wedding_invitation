@@ -1,6 +1,6 @@
 # Wedding invitation
 
-A bilingual, mobile-first Next.js wedding invitation. It includes a cover reveal, photo marquee, countdown, event details, map and Telegram links, dress-code guidance, background music, and personalized guest links.
+A bilingual, mobile-first Next.js wedding invitation. It includes a cover reveal, photo marquee, countdown, event details, map link, background music, and personalized guest links.
 
 ## Run locally
 
