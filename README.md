@@ -17,7 +17,7 @@ All names, dates, times, venue information, links, and Russian/English copy live
 
 Replace the sample images in `public/inv/` while keeping the existing filenames, or update their paths in `app/Invitation.tsx`.
 
-The background soundtrack is `public/assets/music/Odysseus.m4a`. The page attempts to start it automatically. Browsers that block audible autoplay start it on the guest's first tap or key press instead. It can be paused or resumed with the music control.
+The background soundtrack is `public/assets/music/Odysseus.m4a`. It starts from the guest's heart-button interaction, which is the reliable cross-browser way to begin audible playback. It can be paused or resumed with the music control.
 
 Personalized links support these optional parameters:
 

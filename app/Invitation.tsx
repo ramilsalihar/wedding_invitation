@@ -77,31 +77,6 @@ export function Invitation() {
     return () => window.clearTimeout(restore);
   }, []);
 
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const startMusic = async () => {
-      if (!audio.paused) return;
-      try {
-        await audio.play();
-        setMusicPlaying(true);
-        document.removeEventListener("pointerdown", startMusic);
-        document.removeEventListener("keydown", startMusic);
-      } catch {
-        // Browsers commonly require a gesture; listeners remain for the first interaction.
-      }
-    };
-
-    void startMusic();
-    document.addEventListener("pointerdown", startMusic);
-    document.addEventListener("keydown", startMusic);
-    return () => {
-      document.removeEventListener("pointerdown", startMusic);
-      document.removeEventListener("keydown", startMusic);
-    };
-  }, []);
-
   const greeting = useMemo(() => {
     if (!guestQuery) return t.greeting;
     if (guestQuery.type === "male") return `${t.greetingMale} ${guestQuery.names[0]},`;
@@ -111,9 +86,13 @@ export function Invitation() {
   }, [guestQuery, lang, t]);
   const names = `${invitation.couple.first} & ${invitation.couple.second}`;
 
-  async function openInvitation(playMusic: boolean) {
+  function openCover() {
     setCoverOpen(true);
-    if (!playMusic || !audioRef.current) return;
+  }
+
+  async function startMusic() {
+    openCover();
+    if (!audioRef.current || !audioRef.current.paused) return;
     try {
       await audioRef.current.play();
       setMusicPlaying(true);
@@ -140,7 +119,7 @@ export function Invitation() {
 
   return (
     <main className="invitation-shell">
-      <audio ref={audioRef} src="/assets/music/Odysseus.m4a" autoPlay loop preload="auto" />
+      <audio ref={audioRef} src="/assets/music/Odysseus.m4a" loop preload="metadata" />
       <div className="floating-controls" aria-label="Language">
         {(["ru", "en"] as const).map((language) => (
           <button key={language} className={lang === language ? "active" : ""} onClick={() => setLang(language)} aria-pressed={lang === language}>
@@ -162,16 +141,15 @@ export function Invitation() {
           <div className="polaroid">
             <img src="/assets/photos/carousel-4.jpg" alt={`${invitation.couple.first} and ${invitation.couple.second}`} width="1400" height="933" fetchPriority="high" />
           </div>
-          <button className="heart-button" onClick={() => openInvitation(true)} aria-label={t.open}>♥</button>
+          <button className="heart-button" type="button" onPointerDown={startMusic} onClick={startMusic} aria-label={t.open}>♥</button>
           <span className="cover-label">{t.open}</span>
-          <button className="text-button" onClick={() => openInvitation(false)}>{t.skip}</button>
+          <button className="text-button" type="button" onClick={openCover}>{t.skip}</button>
         </section>
       )}
 
       <section className="hero">
         <img className="rose rose-left" src="/inv/rose-spray.png" alt="" width="474" height="474" />
         <img className="rose rose-right" src="/inv/rose-bouquet-tall.png" alt="" width="350" height="525" />
-        <p className="eyebrow">{t.invitation}</p>
         <div className="photo-marquee" aria-hidden="true">
           <div className="photo-track">
             {[...carouselPhotos, ...carouselPhotos].map((image, index) => (
@@ -179,6 +157,7 @@ export function Invitation() {
             ))}
           </div>
         </div>
+        <p className="eyebrow">{t.invitation}</p>
         <h1>{invitation.couple.first} <em>&</em> {invitation.couple.second}</h1>
         <div className="heart-divider"><span />♥<span /></div>
         <p className="date-display">{invitation.event.displayDate}</p>

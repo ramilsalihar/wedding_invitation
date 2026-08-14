@@ -23,3 +23,21 @@ test("production build contains the statically generated root route", async () =
   assert.equal(routeManifest["/page"], "/", "expected the production build to contain /");
   await access(new URL("../.next/server/app/index.html", import.meta.url));
 });
+
+test("uses a bundled script font with Cyrillic glyphs", async () => {
+  const layout = await readFile(new URL("../app/layout.tsx", import.meta.url), "utf8");
+
+  assert.match(layout, /Marck_Script/);
+  assert.match(layout, /subsets:\s*\["cyrillic",\s*"latin"\]/);
+});
+
+test("the first heart interaction opens independently from audio playback", async () => {
+  const invitation = await readFile(new URL("../app/Invitation.tsx", import.meta.url), "utf8");
+
+  assert.doesNotMatch(invitation, /document\.addEventListener\("pointerdown"/);
+  assert.doesNotMatch(invitation, /<audio[^>]+autoPlay/);
+  assert.match(
+    invitation,
+    /className="heart-button"[^>]+onPointerDown=\{startMusic\}[^>]+onClick=\{startMusic\}/,
+  );
+});
