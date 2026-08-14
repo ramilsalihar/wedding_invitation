@@ -66,3 +66,14 @@ test("tapping anywhere on the cover opens the invitation and starts music", asyn
   );
   assert.doesNotMatch(invitation, /onClick=\{openCover\}/);
 });
+
+test("the photo carousel keeps moving on mobile and reduced-motion devices", async () => {
+  const styles = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  assert.match(styles, /\.photo-track \{[^}]*will-change:\s*transform;/);
+  assert.match(styles, /@keyframes marquee \{[^}]*translate3d\(-50%,\s*0,\s*0\)/);
+  assert.match(
+    styles,
+    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?\.photo-track \{[^}]*animation-iteration-count:\s*infinite\s*!important;/,
+  );
+});
